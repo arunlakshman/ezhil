@@ -15,16 +15,10 @@
 				{{ range $paginator.Pages }}
 				<div class="post">
 					<div class="meta">{{ dateFormat "Jan 2, 2006" .Date }}{{ if .Draft }} <span class="draft-label">DRAFT</span> {{ end }}</div>
-					<a class="title" href="{{ .RelPermalink }}">{{.Title}}</a> &mdash;
-					<span class="description">
-						{{ if isset .Params "description" }}
-						{{ .Description }}
-						{{ else if gt (len .RawContent) 120 }}
-						{{ slicestr .RawContent 0 120 }}...
-						{{ else }}
-						{{ .RawContent }}
-						{{ end }}
-					</span>
+					<h4 class="summary">{{.Title}}</h4>
+					<div>
+						<span class="description">{{ .Summary  | plainify }}</span> <a href="{{ .RelPermalink }}">Read More...</a>
+					</div>
 				</div>
 				{{ end }}
 				{{ template "partials/paginator.html" . }}
