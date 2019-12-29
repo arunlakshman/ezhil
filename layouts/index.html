@@ -17,8 +17,11 @@
 					<div class="meta">{{ dateFormat "Jan 2, 2006" .Date }}{{ if .Draft }} <span class="draft-label">DRAFT</span> {{ end }}</div>
 					<h4 class="summary">{{.Title}}</h4>
 					<div>
-						<span class="description">{{ .Summary  | plainify }}</span> <a href="{{ .RelPermalink }}">Read More...</a>
+						<span class="description">{{ .Summary | plainify | htmlUnescape }}</span>
 					</div>
+					<p>
+						<a href="{{ .RelPermalink }}">Read More...</a>
+					</p>
 				</div>
 				{{ end }}
 				{{ template "partials/paginator.html" . }}
