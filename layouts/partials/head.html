@@ -24,9 +24,14 @@
 				</div>
 				<div class="pull-right">
 					<ul class="flat">
-						<a href="{{ .Site.BaseURL }}blog/index.xml" title="RSS Feed"><i data-feather="rss"></i></a>
 						{{- range $index, $key := .Site.Params.Social -}}
-						<a href="{{ $key.url }}" title="{{ $key.name }}"><i data-feather="{{ $key.icon }}"></i></a>
+						<li>
+							<a href="{{ $key.url }}" title="{{ $key.name }}">
+								<svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<use xlink:href="{{ .Site.BaseURL }}/svg/feather-sprite.svg#{{ $key.icon }}"/>
+								</svg>
+							</a>
+						</li>
 						{{- end -}}
 					</ul>
 				</div>
@@ -64,9 +69,14 @@
 				</div>
 				<div class="pull-right">
 					<ul class="flat">
-						<a href="{{ .Site.BaseURL }}blog/index.xml" title="RSS Feed"><i data-feather="rss"></i></a>
 						{{- range $index, $key := .Site.Params.Social -}}
-						<a href="{{ $key.url }}" title="{{ $key.name }}"><i data-feather="{{ $key.icon }}"></i></a>
+						<li>
+							<a href="{{ $key.url }}" title="{{ $key.name }}">
+								<svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<use xlink:href="{{ .Site.BaseURL }}/svg/feather-sprite.svg#{{ $key.icon }}"/>
+								</svg>
+							</a>
+						</li>
 						{{- end -}}
 					</ul>
 				</div>
