@@ -12,16 +12,7 @@
 				{{- end -}}
 			</div>
 
-			<nav class="row nav">
-				<div>
-					<ul class="flat">
-						{{ range .Site.Menus.main }}
-						<li>
-							<a href="{{ .URL }}">{{ .Name }}</a>
-						</li>
-						{{ end }}
-					</ul>
-				</div>
+			<nav class="row pre-nav">
 				<div class="pull-right">
 					<ul class="flat">
 						{{- range $index, $key := .Site.Params.Social -}}
@@ -34,6 +25,25 @@
 						</li>
 						{{- end -}}
 					</ul>
+				</div>
+			</nav>
+			<nav class="row nav">
+				<div>
+					<ul class="flat">
+						{{ range .Site.Menus.main }}
+						<li>
+							<a href="{{ .URL }}">{{ .Name }}</a>
+						</li>
+						{{ end }}
+					</ul>
+				</div>
+				<div class="pull-right">
+					<div class="club">
+						<form id="myForm">
+							<input hidden="true" type="text" id="inputSearch" name="q" placeholder="Search...">
+							<button hidden="true" type="submit" id="buttonSubmitSearch" style="line-height: normal;"><i id="iconSearch" class="fa fa-search"></i></button>
+						</form>
+					</div>
 				</div>
 			</nav>
 		</div>
@@ -83,4 +93,109 @@
 			</nav>
 		</div>
 	</div>
+	<nav class="row pre-nav">
+	<div class="pull-right">
+	<div class="club">
+		<form id="myFormMobile">
+			<input hidden="true" type="text" id="inputSearchMobile" name="q" placeholder="Search...">
+			<button hidden="true" type="submit" id="buttonSubmitSearchMobile" style="line-height: normal;"><i id="iconSearchMobile" class="fa fa-search"></i></button>
+		</form>
+	</div>
+	</div>
+</nav>
 </div>
+
+<script type="text/javascript">
+	window.addEventListener( "load", function () {
+		function sendData(FD) {
+			const XHR = new XMLHttpRequest();
+
+			var parameters = []
+			for (var pair of FD.entries()) {
+				parameters.push(encodeURIComponent(pair[0]) + '=' + encodeURIComponent(pair[1]));
+			}
+
+			XHR.addEventListener( "load", function(event) {
+				document.getElementById( "inputSearch" ).disabled = false;
+				document.getElementById( "buttonSubmitSearch" ).disabled = false;
+				document.getElementById( "iconSearch" ).classList="fa fa-search";
+				document.getElementById( "inputSearchMobile" ).disabled = false;
+				document.getElementById( "buttonSubmitSearchMobile" ).disabled = false;
+				document.getElementById( "iconSearchMobile" ).classList="fa fa-search";
+
+				var jsonResponse = JSON.parse(event.target.responseText);
+				var results = '<div class="search-results"><h1 class="title">Search Results</h1>';
+
+				if (jsonResponse["results"].length > 0) {
+					for (var result of jsonResponse["results"]) {
+						results +=
+							'<div class="post">' +
+								'<div class="meta">' +
+									result["publicationdate"] +
+								"</div>" +
+								'<h4 class="summary"><a href="' + result["uri"] + '">' + result["title"] + "</a></h4>" +
+								'<div><span class="description">' +
+									result["fragment"] +
+								"</span></div>" +
+							"</div>";
+					}
+				}
+				else {
+					results += '<div class="post">No results found</div>';
+				}
+
+				// window.history.pushState("", "", "/search/");
+
+				results += "</div>";
+
+				document.getElementById( "main-content" ).innerHTML = results;
+			});
+
+			XHR.addEventListener( "error", function( event ) {
+				document.getElementById( "inputSearch" ).disabled = false;
+				document.getElementById( "buttonSubmitSearch" ).disabled = false;
+				document.getElementById( "iconSearch" ).classList="fa fa-search";
+				document.getElementById( "inputSearchMobile" ).disabled = false;
+				document.getElementById( "buttonSubmitSearchMobile" ).disabled = false;
+				document.getElementById( "iconSearchMobile" ).classList="fa fa-search";
+
+				console.log('Request failed:' + event);
+			});
+
+			XHR.open( "GET", "{{ .Site.Params.SearchURL }}search?" + parameters.join('&'));
+			XHR.setRequestHeader( 'X-API-Key', '{{ .Site.Params.apiKey }}' );
+			XHR.send();
+
+			document.getElementById( "inputSearch" ).disabled = true;
+			document.getElementById( "buttonSubmitSearch" ).disabled = true;
+			document.getElementById( "iconSearch" ).classList="fa fa-spinner";
+			document.getElementById( "inputSearchMobile" ).disabled = true;
+			document.getElementById( "buttonSubmitSearchMobile" ).disabled = true;
+			document.getElementById( "iconSearchMobile" ).classList="fa fa-spinner";
+		}
+
+		const urlParams = new URLSearchParams(window.location.search);
+		const searchEnabled = urlParams.get('search-enabled');
+
+		if (searchEnabled == "true") {
+			document.getElementById( "inputSearch" ).hidden = false;
+			document.getElementById( "buttonSubmitSearch" ).hidden = false;
+			document.getElementById( "inputSearchMobile" ).hidden = false;
+			document.getElementById( "buttonSubmitSearchMobile" ).hidden = false;
+		}
+
+		const form = document.getElementById( "myForm" );
+
+		form.addEventListener("submit", function (event) {
+			event.preventDefault();
+			sendData(new FormData(form));
+		});
+
+		const formMobile = document.getElementById( "myFormMobile" );
+
+		formMobile.addEventListener("submit", function (event) {
+			event.preventDefault();
+			sendData(new FormData(formMobile));
+		});
+	});
+</script>

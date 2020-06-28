@@ -5,27 +5,29 @@
 	<div class="container wrapper post">
 		{{ partial "head.html" . }}
 
-		<div class="post-header">
-			<h1 class="title">{{ .Title }}</h1>
-			<div class="meta">Posted at {{ dateFormat "Jan 2, 2006" .Date }}{{ if .Draft }} <span class="draft-label">DRAFT</span> {{ end }}</div>
-		</div>
+		<div id = "main-content">
+			<div class="post-header">
+				<h1 class="title">{{ .Title }}</h1>
+				<div class="meta">Posted at {{ dateFormat "Jan 2, 2006" .Date }}{{ if .Draft }} <span class="draft-label">DRAFT</span> {{ end }}</div>
+			</div>
 
-		<div class="markdown">
-			{{ .Content }}
-		</div>
+			<div class="markdown">
+				{{ .Content }}
+			</div>
 
-		<div class="post-tags">
-			{{ if ne .Type "page" }}
-				{{ if gt .Params.tags 0 }}
-					<nav class="nav tags">
-							<ul class="flat">
-								{{ range .Params.tags }}
-								<li><a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}">{{ . }}</a></li>
-								{{ end }}
-							</ul>
-					</nav>
+			<div class="post-tags">
+				{{ if ne .Type "page" }}
+					{{ if gt .Params.tags 0 }}
+						<nav class="nav tags">
+								<ul class="flat">
+									{{ range .Params.tags }}
+									<li><a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}">{{ . }}</a></li>
+									{{ end }}
+								</ul>
+						</nav>
+					{{ end }}
 				{{ end }}
-			{{ end }}
+			</div>
 		</div>
 
 		{{- $.Scratch.Set "isDisqus" true -}}
