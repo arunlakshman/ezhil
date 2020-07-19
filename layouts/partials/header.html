@@ -37,6 +37,13 @@
 	{{- end }}
 	{{- end }}
 
+	<script>
+		const searchUrl = "{{ .Site.Params.SearchURL }}";
+		const apiKey = "{{ .Site.Params.apiKey }}";
+	</script>
+
+	<script src="{{ $.Site.BaseURL }}/js/main.js"></script>
+
 	{{- if isset .Site.Params "customjs" -}}
 	{{- range .Site.Params.customJS }}
 	<script src="{{ $.Site.BaseURL }}{{ . }}"></script>
