@@ -7,3 +7,7 @@
 {{ template "_internal/google_analytics_async.html" . }}
 {{- with .Site.Params.Social -}}
 {{- end -}}
+
+<script>
+	mediumZoom(document.querySelectorAll('div.imageblock > div.content > img'))
+</script>
